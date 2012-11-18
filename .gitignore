@@ -1,0 +1,12 @@
+_ReSharper*/
+obj/
+*.suo
+*.user
+obj/
+bin/
+packages/
+!repositories.config
+*.wixobj
+*.wixpdfb
+*.msi
+*.log
