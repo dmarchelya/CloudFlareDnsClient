@@ -33,11 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,7 +52,14 @@
     <Compile Include="ApiAction.cs" />
     <Compile Include="ApiParameter.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="ClientBase.cs" />
     <Compile Include="CloudFlareCredentials.cs" />
+    <Compile Include="ErrorCode.cs" />
+    <Compile Include="Model\Request.cs" />
+    <Compile Include="CloudFlareHttpResponseBase.cs" />
+    <Compile Include="Model\DnsRecord.cs" />
+    <Compile Include="Model\DnsRecordsResponse.cs" />
+    <Compile Include="Model\DnsRecordsHttpResponse.cs" />
     <Compile Include="DnsRecordType.cs" />
     <Compile Include="EnumerationUtility.cs" />
     <Compile Include="HttpPostDataCollection.cs" />

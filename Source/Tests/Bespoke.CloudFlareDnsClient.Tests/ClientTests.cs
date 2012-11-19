@@ -14,13 +14,25 @@ namespace Bespoke.CloudFlareDnsClient.Tests
 
 		[Ignore("Needs API Key / Email")]
 		[Test]
-		public void CanRetrieveDnsRecord()
+		public void CanRetrieveAllDnsRecord()
 		{
 			string domain = "";
 
 			var client = new Client(apiKey, email);
 
-			client.RetrieveDnsRecords(domain);
+			var response = client.RetrieveAllDnsRecords(domain);
+		}
+
+		[Test]
+		public void NoCredsReturnsAuthenticationFailedErrorCode()
+		{
+			string domain = "bogus.domain";
+
+			var client = new Client("", "");
+
+			var response = client.RetrieveAllDnsRecords(domain);
+
+			Assert.AreEqual(ErrorCode.AuthenticationFailed, response.ErrorCodeType);
 		}
 
 		[Ignore("Needs API Key / Email / Parameters")]
