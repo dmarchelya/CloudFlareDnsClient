@@ -118,6 +118,16 @@ namespace Bespoke.CloudFlareDnsClient
 			}
 		}
 
+		/// <summary>
+		/// rec_new
+		/// </summary>
+		/// <param name="domainName"></param>
+		/// <param name="dnsRecordName"></param>
+		/// <param name="dnsRecordType"></param>
+		/// <param name="dnsRecordContent"></param>
+		/// <param name="ttl"></param>
+		/// <param name="enableCloudFront"></param>
+		/// <returns></returns>
 		public CloudFlareApiResponseBase AddDnsRecord(string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
 								  string dnsRecordContent, string ttl = "1", bool enableCloudFront = true)
 		{
@@ -146,6 +156,12 @@ namespace Bespoke.CloudFlareDnsClient
 			}
 		}
 
+		/// <summary>
+		/// rec_delete
+		/// </summary>
+		/// <param name="dnsRecordId"></param>
+		/// <param name="domainName"></param>
+		/// <returns></returns>
 		public CloudFlareApiResponseBase DeleteDnsRecord(string dnsRecordId, string domainName)
 		{
 			try
