@@ -55,7 +55,7 @@ namespace Bespoke.CloudFlareDnsClient
 
 				var response = GetResponse<DnsRecordsApiResponse>(request);
 
-				if (CachingEnabled)
+				if (CachingEnabled && response != null && response.Response != null && response.Response.DnsRecords != null)
 					Cache.DnsRecords = response.Response.DnsRecords.DnsRecordsObject;
 
 				return response;
@@ -63,7 +63,7 @@ namespace Bespoke.CloudFlareDnsClient
 			catch (Exception ex)
 			{
 				logger.Error(ex);
-				return null;
+				throw;
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace Bespoke.CloudFlareDnsClient
 			catch (Exception ex)
 			{
 				logger.Error(ex);
-				return null;
+				throw;
 			}
 		}
 
@@ -142,7 +142,7 @@ namespace Bespoke.CloudFlareDnsClient
 			catch (Exception ex)
 			{
 				logger.Error(ex);
-				return null;
+				throw;
 			}
 		}
 
@@ -165,7 +165,7 @@ namespace Bespoke.CloudFlareDnsClient
 			catch (Exception ex)
 			{
 				logger.Error(ex);
-				return null;
+				throw;
 			}
 		} 
 

@@ -47,19 +47,26 @@ namespace Bespoke.CloudFlareDnsClient
 			}
 		}
 
-		private static T BuildResponse<T>(string responseString) where T : CloudFlareApiResponseBase
+		private T BuildResponse<T>(string responseString) where T : CloudFlareApiResponseBase
 		{
-			var response = JsonConvert.DeserializeObject<T>(responseString);
-			response.ResponseXmlString = responseString;
-
-			if (!string.IsNullOrWhiteSpace(response.ErrorCode))
+			try
 			{
-				SetErrorCodeType(response);
+				var response = JsonConvert.DeserializeObject<T>(responseString);
+				response.ResponseXmlString = responseString;
 
-				//TODO: possibly throw an exception at this point
+				if (!string.IsNullOrWhiteSpace(response.ErrorCode))
+				{
+					logger.Error(string.Format("Error received from CloudFlare API: {0} - {1}", response.ErrorCode, response.Message));
+					SetErrorCodeType(response);
+				}
+
+				return response;
 			}
-
-			return response;
+			catch (Exception ex)
+			{
+				logger.Error(ex);
+				throw;
+			}
 		}
 
 		private static void SetErrorCodeType<T>(T response)
