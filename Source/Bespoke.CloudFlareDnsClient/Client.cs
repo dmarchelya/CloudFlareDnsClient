@@ -141,9 +141,32 @@ namespace Bespoke.CloudFlareDnsClient
 				logger.Error(ex);
 				return null;
 			}
+		}
+
+		public CloudFlareApiResponseBase DeleteDnsRecord(string dnsRecordId, string domainName)
+		{
+			try
+			{
+				var postData = new HttpPostDataCollection()
+			               	{
+			               		{ApiParameter.DnsRecordId, dnsRecordId},
+			               		{ApiParameter.DomainName, domainName},
+			               	};
+
+				var request = CreatePostHttpWebRequest(credentials, ApiAction.DeleteDnsRecord, postData);
+
+				var response = GetResponse<DnsRecordApiResponse>(request);
+
+				return response;
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex);
+				return null;
+			}
 		} 
 
-		private string GetDnsRecordId(string domainName, string dnsRecordName, DnsRecordType recordType)
+		public string GetDnsRecordId(string domainName, string dnsRecordName, DnsRecordType recordType)
 		{
 			var apiResponse = RetrieveAllDnsRecords(domainName);
 

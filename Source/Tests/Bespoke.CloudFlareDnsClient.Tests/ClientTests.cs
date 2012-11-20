@@ -21,6 +21,8 @@ namespace Bespoke.CloudFlareDnsClient.Tests
 			var client = new Client(apiKey, email);
 
 			var response = client.RetrieveAllDnsRecords(domain);
+
+			Assert.IsTrue(response.Success);
 		}
 
 		[Test]
@@ -60,6 +62,23 @@ namespace Bespoke.CloudFlareDnsClient.Tests
 			var client = new Client(apiKey, email);
 
 			var record = client.AddDnsRecord(domain, recordName, DnsRecordType.A, ipAddress, enableCloudFront: false);
+
+			Assert.IsTrue(record.Success);
+		}
+
+		[Ignore("Needs API Key / Email / Parameters")]
+		[Test]
+		public void CanDeleteDnsRecord()
+		{
+			string domain = "";
+			string recordName = "";
+			string ipAddress = "127.0.0.1";
+
+			var client = new Client(apiKey, email);
+
+			var id = client.GetDnsRecordId(domain, recordName, DnsRecordType.A);
+
+			var record = client.DeleteDnsRecord(id, domain);
 
 			Assert.IsTrue(record.Success);
 		}
