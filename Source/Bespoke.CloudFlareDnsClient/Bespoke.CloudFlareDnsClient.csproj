@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ApiAction.cs" />
     <Compile Include="ApiParameter.cs" />
+    <Compile Include="Cache.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ClientBase.cs" />
     <Compile Include="CloudFlareCredentials.cs" />

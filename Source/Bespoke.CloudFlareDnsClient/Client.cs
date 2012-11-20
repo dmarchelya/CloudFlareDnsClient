@@ -55,6 +55,9 @@ namespace Bespoke.CloudFlareDnsClient
 
 				var response = GetResponse<DnsRecordsApiResponse>(request);
 
+				if (CachingEnabled)
+					Cache.DnsRecords = response.Response.DnsRecords.DnsRecordsObject;
+
 				return response;
 			}
 			catch (Exception ex)
@@ -166,16 +169,39 @@ namespace Bespoke.CloudFlareDnsClient
 			}
 		} 
 
+		/// <summary>
+		/// Get the RecordId for the given dns record.
+		/// Attempts to use the cached value, if available.
+		/// </summary>
+		/// <param name="domainName"></param>
+		/// <param name="dnsRecordName"></param>
+		/// <param name="recordType"></param>
+		/// <returns></returns>
 		public string GetDnsRecordId(string domainName, string dnsRecordName, DnsRecordType recordType)
 		{
-			var apiResponse = RetrieveAllDnsRecords(domainName);
+			string dnsRecordId = GetDnsRecordId(Cache.DnsRecords, domainName, dnsRecordName, recordType);
 
-			foreach (var record in apiResponse.Response.DnsRecords.DnsRecordsObject)
+			if(dnsRecordId == null)
 			{
-				if (record.RecordName == dnsRecordName && record.RecordType == EnumerationUtility.GetStringValue(recordType))
+				var apiResponse = RetrieveAllDnsRecords(domainName);
+
+				dnsRecordId = GetDnsRecordId(apiResponse.Response.DnsRecords.DnsRecordsObject, domainName, dnsRecordName, recordType);
+			}
+
+			return dnsRecordId;
+		}
+
+		private string GetDnsRecordId(List<DnsRecord> dnsRecords, string domainName, string dnsRecordName, DnsRecordType recordType)
+		{
+			if(dnsRecords != null && dnsRecords.Count > 0)
+			{
+				foreach (var record in dnsRecords)
 				{
-					return record.RecordId.ToString();
-				}
+					if (record.RecordName == dnsRecordName && record.RecordType == EnumerationUtility.GetStringValue(recordType))
+					{
+						return record.RecordId.ToString();
+					}
+				}	
 			}
 
 			return null; //No record found

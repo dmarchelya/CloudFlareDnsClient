@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Caching;
 using System.Text;
 using Bespoke.CloudFlareDnsClient.Model;
 using NLog;
@@ -16,6 +18,7 @@ namespace Bespoke.CloudFlareDnsClient
 		private const string formUrlEndodedContentType = "application/x-www-form-urlencoded";
 
 		private Logger logger = LogManager.GetCurrentClassLogger();
+		private bool cachingEnabled = true;
 
 		public T GetResponse<T>(HttpWebRequest request)
 			where T : CloudFlareApiResponseBase
@@ -49,7 +52,7 @@ namespace Bespoke.CloudFlareDnsClient
 			var response = JsonConvert.DeserializeObject<T>(responseString);
 			response.ResponseXmlString = responseString;
 
-			if(!string.IsNullOrWhiteSpace(response.ErrorCode))
+			if (!string.IsNullOrWhiteSpace(response.ErrorCode))
 			{
 				SetErrorCodeType(response);
 
@@ -59,13 +62,13 @@ namespace Bespoke.CloudFlareDnsClient
 			return response;
 		}
 
-		private static void SetErrorCodeType<T>(T response) 
+		private static void SetErrorCodeType<T>(T response)
 			where T : CloudFlareApiResponseBase
 		{
 			//Defaulting to unknown, we override this if a match is found.
 			response.ErrorCodeType = ErrorCode.Unknown;
 
-			foreach (ErrorCode errorCode in Enum.GetValues(typeof (ErrorCode)))
+			foreach (ErrorCode errorCode in Enum.GetValues(typeof(ErrorCode)))
 			{
 				var value = EnumerationUtility.GetStringValue(errorCode);
 
@@ -114,6 +117,15 @@ namespace Bespoke.CloudFlareDnsClient
 			postDataCollection.Add("email", credentials.EmailAddress);
 
 			return postDataCollection;
+		}
+
+		/// <summary>
+		/// Default is true.
+		/// </summary>
+		protected bool CachingEnabled
+		{
+			get { return cachingEnabled; }
+			set { cachingEnabled = value; }
 		}
 	}
 }
