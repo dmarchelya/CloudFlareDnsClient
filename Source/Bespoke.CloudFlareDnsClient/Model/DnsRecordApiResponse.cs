@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace Bespoke.CloudFlareDnsClient.Model
 {
-	public class DnsRecordsHttpResponse : CloudFlareHttpResponseBase
+	public class DnsRecordApiResponse : CloudFlareApiResponseBase
 	{
 		public Request Request { get; set; }
 
 		[JsonProperty(PropertyName = "response")]
-		public DnsRecordsResponse Response { get; set; }
+		public DnsRecordResponse Response { get; set; }
 	}
 }

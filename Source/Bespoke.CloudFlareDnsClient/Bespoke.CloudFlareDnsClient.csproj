@@ -55,11 +55,13 @@
     <Compile Include="ClientBase.cs" />
     <Compile Include="CloudFlareCredentials.cs" />
     <Compile Include="ErrorCode.cs" />
+    <Compile Include="Model\DnsRecordApiResponse.cs" />
+    <Compile Include="Model\DnsRecordResponse.cs" />
     <Compile Include="Model\Request.cs" />
-    <Compile Include="CloudFlareHttpResponseBase.cs" />
+    <Compile Include="CloudFlareApiResponseBase.cs" />
     <Compile Include="Model\DnsRecord.cs" />
     <Compile Include="Model\DnsRecordsResponse.cs" />
-    <Compile Include="Model\DnsRecordsHttpResponse.cs" />
+    <Compile Include="Model\DnsRecordsApiResponse.cs" />
     <Compile Include="DnsRecordType.cs" />
     <Compile Include="EnumerationUtility.cs" />
     <Compile Include="HttpPostDataCollection.cs" />

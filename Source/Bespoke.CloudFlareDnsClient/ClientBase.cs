@@ -18,7 +18,7 @@ namespace Bespoke.CloudFlareDnsClient
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		public T GetResponse<T>(HttpWebRequest request)
-			where T : CloudFlareHttpResponseBase
+			where T : CloudFlareApiResponseBase
 		{
 			try
 			{
@@ -44,7 +44,7 @@ namespace Bespoke.CloudFlareDnsClient
 			}
 		}
 
-		private static T BuildResponse<T>(string responseString) where T : CloudFlareHttpResponseBase
+		private static T BuildResponse<T>(string responseString) where T : CloudFlareApiResponseBase
 		{
 			var response = JsonConvert.DeserializeObject<T>(responseString);
 			response.ResponseXmlString = responseString;
@@ -60,7 +60,7 @@ namespace Bespoke.CloudFlareDnsClient
 		}
 
 		private static void SetErrorCodeType<T>(T response) 
-			where T : CloudFlareHttpResponseBase
+			where T : CloudFlareApiResponseBase
 		{
 			//Defaulting to unknown, we override this if a match is found.
 			response.ErrorCodeType = ErrorCode.Unknown;

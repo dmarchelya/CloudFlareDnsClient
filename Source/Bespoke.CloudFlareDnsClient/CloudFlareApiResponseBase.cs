@@ -2,15 +2,15 @@
 
 namespace Bespoke.CloudFlareDnsClient
 {
-	public class CloudFlareHttpResponseBase
+	public class CloudFlareApiResponseBase
 	{
-		public string Result { get; internal set; }
+		public string Result { get; set; }
 
 		[JsonProperty(PropertyName = "msg")]
-		public string Message { get; internal set; }
+		public string Message { get; set; }
 
 		[JsonProperty(PropertyName = "err_code")]
-		public string ErrorCode { get; internal set; }
+		public string ErrorCode { get; set; }
 
 		#region Bespoke Properties
 

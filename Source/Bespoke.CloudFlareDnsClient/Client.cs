@@ -42,7 +42,7 @@ namespace Bespoke.CloudFlareDnsClient
 		/// </summary>
 		/// <param name="domainName"></param>
 		/// <returns></returns>
-		public DnsRecordsHttpResponse RetrieveAllDnsRecords(string domainName)
+		public DnsRecordsApiResponse RetrieveAllDnsRecords(string domainName)
 		{
 			try
 			{
@@ -53,7 +53,7 @@ namespace Bespoke.CloudFlareDnsClient
 
 				var request = CreatePostHttpWebRequest(credentials, ApiAction.RetrieveDnsRecords, postData);
 
-				var response = GetResponse<DnsRecordsHttpResponse>(request);
+				var response = GetResponse<DnsRecordsApiResponse>(request);
 
 				return response;
 			}
@@ -64,8 +64,14 @@ namespace Bespoke.CloudFlareDnsClient
 			}
 		}
 
+		public CloudFlareApiResponseBase EditDnsRecord(string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
+								  string dnsRecordContent, string ttl = "1", bool enableCloudFront = true)
+		{
+			return EditDnsRecord(null, domainName, dnsRecordName, dnsRecordType, dnsRecordContent);
+		}
+
 		/// <summary>
-		/// 
+		/// rec_edit
 		/// </summary>
 		/// <param name="dnsRecordId"></param>
 		/// <param name="domainName"></param>
@@ -75,11 +81,16 @@ namespace Bespoke.CloudFlareDnsClient
 		/// <param name="ttl">1 = auto</param>
 		/// <param name="enableCloudFront"></param>
 		/// <returns></returns>
-		public bool EditDnsRecord(string dnsRecordId, string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
+		public CloudFlareApiResponseBase EditDnsRecord(string dnsRecordId, string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
 								  string dnsRecordContent, string ttl = "1", bool enableCloudFront = true)
 		{
 			try
 			{
+				if(string.IsNullOrWhiteSpace(dnsRecordId))
+				{
+					dnsRecordId = GetDnsRecordId(domainName, dnsRecordName, dnsRecordType);
+				}
+
 				var postData = new HttpPostDataCollection()
 			               	{
 			               		{ApiParameter.DnsRecordId, dnsRecordId},
@@ -93,16 +104,30 @@ namespace Bespoke.CloudFlareDnsClient
 
 				var request = CreatePostHttpWebRequest(credentials, ApiAction.EditDnsRecord, postData);
 
-				var response = GetResponse<CloudFlareHttpResponseBase>(request);
+				var response = GetResponse<DnsRecordApiResponse>(request);
 
-				return true;
+				return response;
 			}
 			catch (Exception ex)
 			{
 				logger.Error(ex);
-
-				return false;
+				return null;
 			}
+		}
+
+		private string GetDnsRecordId(string domainName, string dnsRecordName, DnsRecordType recordType)
+		{
+			var apiResponse = RetrieveAllDnsRecords(domainName);
+
+			foreach (var record in apiResponse.Response.DnsRecords.DnsRecordsObject)
+			{
+				if (record.RecordName == dnsRecordName && record.RecordType == EnumerationUtility.GetStringValue(recordType))
+				{
+					return record.RecordId.ToString();
+				}
+			}
+
+			return null; //No record found
 		}
 	}
 }
