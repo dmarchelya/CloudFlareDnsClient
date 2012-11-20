@@ -115,6 +115,34 @@ namespace Bespoke.CloudFlareDnsClient
 			}
 		}
 
+		public CloudFlareApiResponseBase AddDnsRecord(string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
+								  string dnsRecordContent, string ttl = "1", bool enableCloudFront = true)
+		{
+			try
+			{
+				var postData = new HttpPostDataCollection()
+			               	{
+			               		{ApiParameter.DomainName, domainName},
+			               		{ApiParameter.DnsRecordName, dnsRecordName},
+			               		{ApiParameter.DnsRecordType, EnumerationUtility.GetStringValue(dnsRecordType)},
+			               		{ApiParameter.DnsRecordContent, dnsRecordContent},
+			               		{ApiParameter.Ttl, ttl},
+			               		{ApiParameter.ServiceMode, enableCloudFront ? "1" : "0"}
+			               	};
+
+				var request = CreatePostHttpWebRequest(credentials, ApiAction.AddDnsRecord, postData);
+
+				var response = GetResponse<DnsRecordApiResponse>(request);
+
+				return response;
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex);
+				return null;
+			}
+		} 
+
 		private string GetDnsRecordId(string domainName, string dnsRecordName, DnsRecordType recordType)
 		{
 			var apiResponse = RetrieveAllDnsRecords(domainName);

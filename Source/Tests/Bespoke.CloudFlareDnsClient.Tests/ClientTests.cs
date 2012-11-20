@@ -48,5 +48,20 @@ namespace Bespoke.CloudFlareDnsClient.Tests
 
 			client.EditDnsRecord(recordId, domain, recordName, DnsRecordType.A, ipAddress, enableCloudFront:false);
 		}
+
+		[Ignore("Needs API Key / Email / Parameters")]
+		[Test]
+		public void CanCreateDnsRecord()
+		{
+			string domain = "";
+			string recordName = "";
+			string ipAddress = "127.0.0.1";
+
+			var client = new Client(apiKey, email);
+
+			var record = client.AddDnsRecord(domain, recordName, DnsRecordType.A, ipAddress, enableCloudFront: false);
+
+			Assert.IsTrue(record.Success);
+		}
 	}
 }
