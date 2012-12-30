@@ -50,6 +50,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="ClientBase.cs" />
     <Compile Include="CloudFlareCredentials.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="Model\DnsRecordApiResponse.cs" />
     <Compile Include="Model\DnsRecordResponse.cs" />

@@ -20,10 +20,6 @@ namespace Bespoke.CloudFlareDnsClient
 
 		#region ctors
 
-		private Client()
-		{
-		}
-
 		public Client(CloudFlareCredentials credentials)
 		{
 			this.credentials = credentials;
@@ -84,7 +80,7 @@ namespace Bespoke.CloudFlareDnsClient
 		/// <param name="enableCloudFront"></param>
 		/// <returns></returns>
 		public CloudFlareApiResponseBase EditDnsRecord(string dnsRecordId, string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
-								  string dnsRecordContent, string ttl = "1", bool enableCloudFront = true)
+								  string dnsRecordContent, string ttl = Constants.AutomaticTtl, bool enableCloudFront = true)
 		{
 			try
 			{
