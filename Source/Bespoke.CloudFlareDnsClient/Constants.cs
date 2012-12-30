@@ -7,6 +7,6 @@ namespace Bespoke.CloudFlareDnsClient
 {
 	public static class Constants
 	{
-		public const string AutomaticTtl = "1";
+		public const int AutomaticTtl = 1;
 	}
 }

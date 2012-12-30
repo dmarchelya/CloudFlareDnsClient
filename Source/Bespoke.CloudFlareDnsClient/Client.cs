@@ -63,7 +63,7 @@ namespace Bespoke.CloudFlareDnsClient
 		}
 
 		public CloudFlareApiResponseBase EditDnsRecord(string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
-		                                               string dnsRecordContent, string ttl = "1", bool enableCloudFront = true)
+		                                               string dnsRecordContent, int ttl = Constants.AutomaticTtl, bool enableCloudFront = true)
 		{
 			return EditDnsRecord(null, domainName, dnsRecordName, dnsRecordType, dnsRecordContent);
 		}
@@ -80,24 +80,24 @@ namespace Bespoke.CloudFlareDnsClient
 		/// <param name="enableCloudFront"></param>
 		/// <returns></returns>
 		public CloudFlareApiResponseBase EditDnsRecord(
-			string dnsRecordId, string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
-			string dnsRecordContent, string ttl = Constants.AutomaticTtl, bool enableCloudFront = true)
+			int? dnsRecordId, string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
+			string dnsRecordContent, int ttl = Constants.AutomaticTtl, bool enableCloudFront = true)
 		{
 			try
 			{
-				if (string.IsNullOrWhiteSpace(dnsRecordId))
+				if (dnsRecordId == null)
 				{
 					dnsRecordId = GetDnsRecordId(domainName, dnsRecordName, dnsRecordType);
 				}
 
 				var postData = new HttpPostDataCollection()
 				               	{
-				               		{ApiParameter.DnsRecordId, dnsRecordId},
+				               		{ApiParameter.DnsRecordId, dnsRecordId.Value.ToString() },
 				               		{ApiParameter.DomainName, domainName},
 				               		{ApiParameter.DnsRecordName, dnsRecordName},
 				               		{ApiParameter.DnsRecordType, EnumerationUtility.GetStringValue(dnsRecordType)},
 				               		{ApiParameter.DnsRecordContent, dnsRecordContent},
-				               		{ApiParameter.Ttl, ttl},
+				               		{ApiParameter.Ttl, ttl.ToString() },
 				               		{ApiParameter.ServiceMode, enableCloudFront ? "1" : "0"}
 				               	};
 
@@ -125,7 +125,7 @@ namespace Bespoke.CloudFlareDnsClient
 		/// <param name="enableCloudFront"></param>
 		/// <returns></returns>
 		public CloudFlareApiResponseBase AddDnsRecord(string domainName, string dnsRecordName, DnsRecordType dnsRecordType,
-		                                              string dnsRecordContent, string ttl = "1", bool enableCloudFront = true)
+		                                              string dnsRecordContent, int ttl = Constants.AutomaticTtl, bool enableCloudFront = true)
 		{
 			try
 			{
@@ -135,7 +135,7 @@ namespace Bespoke.CloudFlareDnsClient
 				               		{ApiParameter.DnsRecordName, dnsRecordName},
 				               		{ApiParameter.DnsRecordType, EnumerationUtility.GetStringValue(dnsRecordType)},
 				               		{ApiParameter.DnsRecordContent, dnsRecordContent},
-				               		{ApiParameter.Ttl, ttl},
+				               		{ApiParameter.Ttl, ttl.ToString()},
 				               		{ApiParameter.ServiceMode, enableCloudFront ? "1" : "0"}
 				               	};
 
@@ -158,13 +158,13 @@ namespace Bespoke.CloudFlareDnsClient
 		/// <param name="dnsRecordId"></param>
 		/// <param name="domainName"></param>
 		/// <returns></returns>
-		public CloudFlareApiResponseBase DeleteDnsRecord(string dnsRecordId, string domainName)
+		public CloudFlareApiResponseBase DeleteDnsRecord(int dnsRecordId, string domainName)
 		{
 			try
 			{
 				var postData = new HttpPostDataCollection()
 				               	{
-				               		{ApiParameter.DnsRecordId, dnsRecordId},
+				               		{ApiParameter.DnsRecordId, dnsRecordId.ToString()},
 				               		{ApiParameter.DomainName, domainName},
 				               	};
 
@@ -203,9 +203,9 @@ namespace Bespoke.CloudFlareDnsClient
 		/// <param name="dnsRecordName"></param>
 		/// <param name="recordType"></param>
 		/// <returns></returns>
-		public string GetDnsRecordId(string domainName, string dnsRecordName, DnsRecordType recordType)
+		public int? GetDnsRecordId(string domainName, string dnsRecordName, DnsRecordType recordType)
 		{
-			string dnsRecordId = GetDnsRecordId(Cache.DnsRecords, dnsRecordName, recordType);
+			var dnsRecordId = GetDnsRecordId(Cache.DnsRecords, dnsRecordName, recordType);
 
 			if (dnsRecordId == null)
 			{
@@ -233,12 +233,12 @@ namespace Bespoke.CloudFlareDnsClient
 			return null; //No record found
 		}
 
-		private string GetDnsRecordId(List<DnsRecord> dnsRecords, string dnsRecordName, DnsRecordType recordType)
+		private int? GetDnsRecordId(List<DnsRecord> dnsRecords, string dnsRecordName, DnsRecordType recordType)
 		{
 			var record = GetDnsRecord(dnsRecords, dnsRecordName, DnsRecordType.A);
 
 			if (record != null)
-				return record.RecordId.ToString();
+				return record.RecordId;
 
 			return null;
 		}

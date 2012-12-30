@@ -41,7 +41,7 @@ namespace Bespoke.CloudFlareDnsClient.Tests
 		[Test]
 		public void CanEditDnsRecord()
 		{
-			string recordId = "";
+			int? recordId = null;
 			string domain = "";
 			string recordName = "";
 			string ipAddress = "127.0.0.1";
@@ -78,7 +78,7 @@ namespace Bespoke.CloudFlareDnsClient.Tests
 
 			var id = client.GetDnsRecordId(domain, recordName, DnsRecordType.A);
 
-			var record = client.DeleteDnsRecord(id, domain);
+			var record = client.DeleteDnsRecord(id.Value, domain);
 
 			Assert.IsTrue(record.Success);
 		}
