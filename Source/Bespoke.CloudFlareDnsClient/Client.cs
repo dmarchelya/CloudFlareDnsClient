@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using Bespoke.CloudFlareDnsClient.Model;
 using NLog;
