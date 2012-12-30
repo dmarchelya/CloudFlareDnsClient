@@ -7,7 +7,7 @@ namespace Bespoke.CloudFlareDnsClient
 {
 	public class CloudFlareCredentials
 	{
-		public CloudFlareCredentials(string apiKey, string emailAddress)
+		public CloudFlareCredentials(string emailAddress, string apiKey)
 		{
 			ApiKey = apiKey;
 			EmailAddress = emailAddress;

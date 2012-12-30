@@ -25,9 +25,9 @@ namespace Bespoke.CloudFlareDnsClient
 			this.credentials = credentials;
 		}
 
-		public Client(string apiKey, string emailAddress)
+		public Client(string emailAddress, string apiKey)
 		{
-			this.credentials = new CloudFlareCredentials(apiKey, emailAddress);
+			this.credentials = new CloudFlareCredentials(emailAddress, apiKey);
 		}
 
 		#endregion ctors
