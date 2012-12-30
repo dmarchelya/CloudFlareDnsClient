@@ -32,7 +32,7 @@ namespace Bespoke.CloudFlareDnsClient
 					using (var streamReader = new StreamReader(responseStream))
 					{
 						var responseString = streamReader.ReadToEnd();
-						logger.Info(responseString);
+						logger.Debug(responseString);
 
 						var responseObject = BuildResponse<T>(responseString);
 
